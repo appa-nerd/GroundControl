@@ -128,7 +128,7 @@ class FrontPage(Screen, MakesmithInitFuncs):
         self.jmpsize()
         xtarget = -1*self.target[0] - float(self.stepsizeval)
         ytarget = self.target[1] + float(self.stepsizeval)
-        self.data.gcode_queue.put("G00 F" + str(float(self.feedRate)) + " X" + str(xtarget) + " Y" + str(ytarget) + " ")
+        self.data.gcode_queue.put("G01 F" + str(float(self.feedRate)) + " X" + str(xtarget) + " Y" + str(ytarget) + " ")
         self.target[0] = self.target[0] + float(self.stepsizeval)
         self.target[1] = self.target[1] + float(self.stepsizeval)
         
@@ -136,60 +136,60 @@ class FrontPage(Screen, MakesmithInitFuncs):
         self.jmpsize()
         xtarget = -1*self.target[0] + float(self.stepsizeval)
         ytarget = self.target[1] + float(self.stepsizeval)
-        self.data.gcode_queue.put("G00 F" + str(float(self.feedRate)) + " X" + str(xtarget) + " Y" + str(ytarget) + " ")
+        self.data.gcode_queue.put("G01 F" + str(float(self.feedRate)) + " X" + str(xtarget) + " Y" + str(ytarget) + " ")
         self.target[0] = self.target[0] - float(self.stepsizeval)
         self.target[1] = self.target[1] + float(self.stepsizeval)
 
     def up(self):
         self.jmpsize()
         target = self.target[1] + float(self.stepsizeval)
-        self.data.gcode_queue.put("G00 F" + str(float(self.feedRate)) + " Y" + str(target) + " ")
+        self.data.gcode_queue.put("G01 F" + str(float(self.feedRate)) + " Y" + str(target) + " ")
         self.target[1] = self.target[1] + float(self.stepsizeval)
 
     def left(self):
         self.jmpsize()
         target = -1*self.target[0] - float(self.stepsizeval)
-        self.data.gcode_queue.put("G00 F" + str(float(self.feedRate)) + " X" + str(target) + " ")
+        self.data.gcode_queue.put("G01 F" + str(float(self.feedRate)) + " X" + str(target) + " ")
         self.target[0] = self.target[0] + float(self.stepsizeval)
         
     def right(self):
         self.jmpsize()
         target = -1*self.target[0] + float(self.stepsizeval)
-        self.data.gcode_queue.put("G00 F" + str(float(self.feedRate)) + " X" + str(target) + " ")
+        self.data.gcode_queue.put("G01 F" + str(float(self.feedRate)) + " X" + str(target) + " ")
         self.target[0] = self.target[0] - float(self.stepsizeval)
         
     def downLeft(self):
         self.jmpsize()
         xtarget = -1*self.target[0] - float(self.stepsizeval)
         ytarget = self.target[1] - float(self.stepsizeval)
-        self.data.gcode_queue.put("G00 F" + str(float(self.feedRate)) + " X" + str(xtarget) + " Y" + str(ytarget) + " ")
+        self.data.gcode_queue.put("G01 F" + str(float(self.feedRate)) + " X" + str(xtarget) + " Y" + str(ytarget) + " ")
         self.target[0] = self.target[0] + float(self.stepsizeval)
         self.target[1] = self.target[1] - float(self.stepsizeval)    
 
     def down(self):
         self.jmpsize()
         target = self.target[1] - float(self.stepsizeval)
-        self.data.gcode_queue.put("G00 F" + str(float(self.feedRate)) + " Y" + str(target) + " ")
+        self.data.gcode_queue.put("G01 F" + str(float(self.feedRate)) + " Y" + str(target) + " ")
         self.target[1] = self.target[1] - float(self.stepsizeval)
 
     def downRight(self):
         self.jmpsize()
         xtarget = -1*self.target[0] + float(self.stepsizeval)
         ytarget = self.target[1] - float(self.stepsizeval)
-        self.data.gcode_queue.put("G00 F" + str(float(self.feedRate)) + " X" + str(xtarget) + " Y" + str(ytarget) + " ")
+        self.data.gcode_queue.put("G01 F" + str(float(self.feedRate)) + " X" + str(xtarget) + " Y" + str(ytarget) + " ")
         self.target[0] = self.target[0] - float(self.stepsizeval)
         self.target[1] = self.target[1] - float(self.stepsizeval)
 
     def zUp(self):
         self.jmpsize()
         target = self.target[2] + 0.10*float(self.stepsizeval)
-        self.data.gcode_queue.put("G00 F" + str(float(self.feedRate)) + " Z" + str(target) + " ")
+        self.data.gcode_queue.put("G01 F" + str(float(self.feedRate)) + " Z" + str(target) + " ")
         self.target[2] = self.target[2] + 0.10*float(self.stepsizeval)
 
     def zDown(self):
         self.jmpsize()
         target = self.target[2] - 0.10*float(self.stepsizeval)
-        self.data.gcode_queue.put("G00 F" + str(float(self.feedRate)) + " Z" + str(target) + " ")
+        self.data.gcode_queue.put("G01 F" + str(float(self.feedRate)) + " Z" + str(target) + " ")
         self.target[2] = self.target[2] - 0.10*float(self.stepsizeval)
 
     def home(self):
