@@ -166,13 +166,13 @@ class FrontPage(Screen, MakesmithInitFuncs):
     def left(self):
         self.jmpsize()
         target = self.target[0] - float(self.stepsizeval)
-        self.data.gcode_queue.put("G00 F" + str(float(self.feedRate)) + " X" + str(target) + " ")
+        self.data.gcode_queue.put("G01 F" + str(float(self.feedRate)) + " X" + str(target) + " ")
         self.target[0] = target
         
     def right(self):
         self.jmpsize()
         target = self.target[0] + float(self.stepsizeval)
-        self.data.gcode_queue.put("G00 F" + str(float(self.feedRate)) + " X" + str(target) + " ")
+        self.data.gcode_queue.put("G01 F" + str(float(self.feedRate)) + " X" + str(target) + " ")
         self.target[0] = target
         
     def downLeft(self):
