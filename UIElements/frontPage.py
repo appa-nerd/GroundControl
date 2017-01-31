@@ -67,6 +67,7 @@ class FrontPage(Screen, MakesmithInitFuncs):
         self.data.bind(connectionStatus = self.updateConnectionStatus)
         self.data.bind(units            = self.onUnitsSwitch)
         self.data.bind(gcodeIndex       = self.onIndexMove)
+        self.data.bind(gcode            = self.onGcodeUpdate)
     
     def updateConnectionStatus(self, callback, connected):
         
@@ -103,9 +104,18 @@ class FrontPage(Screen, MakesmithInitFuncs):
     def onIndexMove(self, callback, newIndex):
         self.gcodeLineNumber = str(newIndex)
     
+    def onGcodeUpdate(self, callback, newGcode):
+    
+        #reset the shift values to 0 because the new gcode is not loaded with a shift applied
+        self.shiftX = 0
+        self.shiftY = 0
+    
     def moveGcodeIndex(self, dist):
         self.data.gcodeIndex = self.data.gcodeIndex + dist
-        gCodeLine = self.data.gcode[self.data.gcodeIndex]
+        try:
+            gCodeLine = self.data.gcode[self.data.gcodeIndex]
+        except IndexError:
+            gCodeLine = 'end of file'
         print gCodeLine
         
         xTarget = 0
@@ -114,10 +124,26 @@ class FrontPage(Screen, MakesmithInitFuncs):
         x = re.search("X(?=.)([+-]?([0-9]*)(\.([0-9]+))?)", gCodeLine)
         if x:
             xTarget = float(x.groups()[0])
+        else:
+            if self.data.units == "INCHES":
+                xTarget = self.gcodecanvas.targetIndicator.pos[0] / 25.4
+            else:
+                xTarget = self.gcodecanvas.targetIndicator.pos[0]              
         
         y = re.search("Y(?=.)([+-]?([0-9]*)(\.([0-9]+))?)", gCodeLine)
         if y:
             yTarget = float(y.groups()[0])
+        else:
+            if self.data.units == "INCHES":
+                yTarget = self.gcodecanvas.targetIndicator.pos[1] / 25.4
+            else:
+                yTarget = self.gcodecanvas.targetIndicator.pos[1] 
+
+        z = re.search("Z", gCodeLine)
+        if z:
+            self.gcodecanvas.targetIndicator.color = (1,1,1)
+        else:
+            self.gcodecanvas.targetIndicator.color = (1,0,0)
         
         self.gcodecanvas.targetIndicator.setPos(xTarget,yTarget,self.data.units)
     
@@ -220,8 +246,8 @@ class FrontPage(Screen, MakesmithInitFuncs):
         if self.target[2] >= 0:
             self.data.gcode_queue.put("G00 F" + str(float(self.feedRate)) + " X" + str(self.shiftX) + " Y" + str(self.shiftY) + " ")
             self.data.gcode_queue.put("G00 F" + str(float(self.feedRate)) + " Z0 ")
-        self.target[0] = 0.0
-        self.target[1] = 0.0
+        self.target[0] = self.shiftX
+        self.target[1] = self.shiftY
         self.target[2] = 0.0
     
     def moveLine(self, gcodeLine, moveXBy, moveYBy):
